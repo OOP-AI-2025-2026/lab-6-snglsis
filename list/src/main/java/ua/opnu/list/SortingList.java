@@ -101,13 +101,10 @@ public class SortingList extends Application {
      * Налаштовуємо кнопки. Тут має бути ваш код
      */
     private HBox setButtons() {
-        // Кнопка JavaFX має клас Button
         final Button sortByNameButton = new Button("Сортувати за ім'ям");
         final Button sortByLastNameButton = new Button("Сортувати за прізвищем");
         final Button sortByMarkButton = new Button("Сортувати за оцінкою");
 
-        // Блок коду нижче дозволяє кнопкам розтягуватися завширшки, щоб зайняти
-        // весь простір HBox, причому кнопки будуть однакового розміру
         HBox.setHgrow(sortByNameButton, Priority.ALWAYS);
         HBox.setHgrow(sortByLastNameButton, Priority.ALWAYS);
         HBox.setHgrow(sortByMarkButton, Priority.ALWAYS);
@@ -115,30 +112,41 @@ public class SortingList extends Application {
         sortByLastNameButton.setMaxWidth(Double.MAX_VALUE);
         sortByMarkButton.setMaxWidth(Double.MAX_VALUE);
 
-        // Обробка натискання кнопки за допомогою об'єкта анонімного класу,
-        // реалізує інтерфейс Comparable
+        // окремі прапорці для кожної кнопки
+        final boolean[] nameOrder = {true};
+        final boolean[] lastNameOrder = {true};
+        final boolean[] markOrder = {true};
 
-        final boolean[] order = {true};
-
+        // Сортування за ім’ям
         sortByNameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                students.sort(new NameSorter(order[0]));
-                order[0] = !order[0];
+                students.sort(new NameSorter(nameOrder[0]));
+                nameOrder[0] = !nameOrder[0];
             }
         });
 
-        // TODO: Обробка натискання на кнопку "Сортувати за прізвищем"
+        // Сортування за прізвищем
+        sortByLastNameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                students.sort(new LastNameSorter(lastNameOrder[0]));
+                lastNameOrder[0] = !lastNameOrder[0];
+            }
+        });
 
-        // TODO: Обробка натискання на кнопку "Сортувати за оцінкою"
+        // Сортування за середнім балом
+        sortByMarkButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                students.sort(new MarkSorter(markOrder[0]));
+                markOrder[0] = !markOrder[0];
+            }
+        });
 
-        // Створюємо горизонтальний ряд
         HBox hb = new HBox();
-        // Відстань між елементами ряду
         hb.setSpacing(5);
-        // Додаємо до ряду елементи. У нашому випадку – кнопки
         hb.getChildren().addAll(sortByNameButton, sortByLastNameButton, sortByMarkButton);
-        // Говоримо, що елементи в ряді мають бути вирівняні по центру
         hb.setAlignment(Pos.CENTER);
 
         return hb;
